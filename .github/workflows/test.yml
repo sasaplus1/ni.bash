@@ -59,7 +59,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: find
-        run: echo "result=$(find . \( -name '*.sh' -o -name '*.bash' \) -print | xargs echo)" | tee -a "$GITHUB_ENV"
+        run: |
+          echo 'result<<EOF' | tee -a "$GITHUB_OUTPUT"
+          find . \( -name '*.sh' -o -name '*.bash' \) -print | xargs echo | tee -a "$GITHUB_OUTPUT"
+          echo 'EOF' | tee -a "$GITHUB_OUTPUT"
+      # run: echo "result=$(find . \( -name '*.sh' -o -name '*.bash' \) -print | xargs echo)" | tee -a "$GITHUB_ENV"
       # run: |
       #   echo 'result<<EOF' | tee -a "$GITHUB_OUTPUT"
       #   find . \( -name '*.sh' -o -name '*.bash' \) -print | tee -a "$GITHUB_OUTPUT"
