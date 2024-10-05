@@ -1,0 +1,28 @@
+name: lint
+
+on:
+  push:
+    paths:
+      - '**/*.sh'
+      - '**/*.bash'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - id: find
+        run: |
+          {
+            echo "result<<'EOB'"
+            find . -name '*.sh' -o -name '*.bash' -print
+            echo 'EOB'
+          } | tee -a "$GITHUB_OUTPUT"
+      - uses: docker://koalaman/shellcheck:stable
+        with:
+          args: ${{ steps.find.outputs.result }}
