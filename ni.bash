@@ -9,7 +9,13 @@ __ni-detect-package-manager() {
 
   if [ -f 'package.json' ]
   then
-    packageManager="$(command jq -r '.packageManager // ""' package.json)"
+    if type jq >/dev/null 2>&1
+    then
+      packageManager="$(command jq -r '.packageManager // ""' package.json)"
+    elif type node >/dev/null 2>&1
+    then
+      packageManager="$(command node -p 'require("./package.json").packageManager || ""')"
+    fi
     packageManagerName="${packageManager%@*}"
     packageManagerVersion="${packageManager#*@}"
     [ "$packageManagerName" == 'yarn' ] && [ "${packageManagerVersion%%.*}" -gt 1 ] && packageManagerName='yarn-berry'
