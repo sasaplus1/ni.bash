@@ -38,11 +38,17 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+      - if: matrix.manager == 'bun'
+        run: touch bun.lockb
       - if: matrix.manager == 'pnpm'
         uses: pnpm/action-setup@v4
         with:
           version: latest
+      - if: matrix.manager == 'pnpm'
+        run: touch pnpm-lock.yaml
       - if: matrix.manager == 'yarn'
         run: npm install -g yarn
+      - if: matrix.manager == 'yarn'
+        run: touch yarn.lock
       - run: make install
       - run: make test
