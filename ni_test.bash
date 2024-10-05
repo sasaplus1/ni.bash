@@ -8,6 +8,20 @@ manager="$(__ni-detect-package-manager)"
 
 clean() {
   command rm -rf ./package.json ./package-lock.json ./yarn.lock ./pnpm-lock.yml ./bun.lockb ./node_modules
+  case "$manager" in
+    bun)
+      touch bun.lockb
+      ;;
+    pnpm)
+      touch pnpm-lock.yml
+      ;;
+    yarn|yarn-berry)
+      touch yarn.lock
+      ;;
+    npm)
+      touch package-lock.json
+      ;;
+  esac
 }
 
 oneTimeSetUp() {
