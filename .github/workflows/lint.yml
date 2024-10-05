@@ -20,9 +20,9 @@ jobs:
       - id: find
         run: |
           {
-            echo "result<<'EOB'"
+            echo 'result<<EOB'
             find . \( -name '*.sh' -o -name '*.bash' \) -print
-            echo 'EOB'
+            echo EOB
           } | tee -a "$GITHUB_OUTPUT"
       - uses: docker://koalaman/shellcheck:stable
         with:
