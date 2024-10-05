@@ -1,0 +1,48 @@
+name: test
+
+on:
+  - push
+  - pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - macos-latest
+          - ubuntu-latest
+        manager:
+          - bun
+          - pnpm
+          - yarn
+          # - yarn-berry
+          - npm
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts
+      - if: matrix.manager == 'bun'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - if: matrix.manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - if: matrix.manager == 'yarn'
+        run: npm install -g yarn
+      - run: make install
+      - run: make test
