@@ -4,7 +4,12 @@
 
 . ./ni.bash
 
-manager="$(__ni-detect-package-manager)"
+manager=
+
+detect-package-manager() {
+  manager="$(__ni-detect-package-manager)"
+  echo "manager: $manager"
+}
 
 clean() {
   command rm -rf ./package.json ./package-lock.json ./yarn.lock ./pnpm-lock.yml ./bun.lockb ./node_modules
@@ -25,7 +30,8 @@ clean() {
 }
 
 oneTimeSetUp() {
-  echo "manager: $manager"
+  detect-package-manager
+  clean
 }
 
 oneTimeTearDown() {
