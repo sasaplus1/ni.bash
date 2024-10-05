@@ -52,3 +52,23 @@ jobs:
         run: touch yarn.lock
       - run: make install
       - run: make test
+  lint:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - id: find
+        run: |
+          echo 'result<<EOF' | tee -a "$GITHUB_OUTPUT"
+          find . \( -name '*.sh' -o -name '*.bash' \) -print | tee -a "$GITHUB_OUTPUT"
+          echo 'EOF' | tee -a "$GITHUB_OUTPUT"
+      # run: |
+      #   {
+      #     echo 'result<<EOB'
+      #     find . \( -name '*.sh' -o -name '*.bash' \) -print
+      #     echo EOB
+      #   } | tee -a "$GITHUB_OUTPUT"
+      - uses: docker://koalaman/shellcheck:stable
+        with:
+          args: ${{ steps.find.outputs.result }}
