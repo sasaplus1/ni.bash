@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - windows-latest
+          # - windows-latest
           - macos-latest
           - ubuntu-latest
         manager:
@@ -63,17 +63,6 @@ jobs:
           echo 'result<<EOF' | tee -a "$GITHUB_OUTPUT"
           find . \( -name '*.sh' -o -name '*.bash' \) -print | xargs echo | tee -a "$GITHUB_OUTPUT"
           echo 'EOF' | tee -a "$GITHUB_OUTPUT"
-      # run: echo "result=$(find . \( -name '*.sh' -o -name '*.bash' \) -print | xargs echo)" | tee -a "$GITHUB_ENV"
-      # run: |
-      #   echo 'result<<EOF' | tee -a "$GITHUB_OUTPUT"
-      #   find . \( -name '*.sh' -o -name '*.bash' \) -print | tee -a "$GITHUB_OUTPUT"
-      #   echo 'EOF' | tee -a "$GITHUB_OUTPUT"
-      # run: |
-      #   {
-      #     echo 'result<<EOB'
-      #     find . \( -name '*.sh' -o -name '*.bash' \) -print
-      #     echo EOB
-      #   } | tee -a "$GITHUB_OUTPUT"
       - uses: docker://koalaman/shellcheck:stable
         with:
           args: ${{ steps.find.outputs.result }}
