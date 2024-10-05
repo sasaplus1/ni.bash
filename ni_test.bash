@@ -2,6 +2,8 @@
 
 # NOTE: why assertTrue returns unexpected result?
 
+export SHUNIT_TEST_PREFIX='>>> '
+
 . ./ni.bash
 
 manager=
