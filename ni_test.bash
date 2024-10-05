@@ -124,4 +124,5 @@ test_ni-option-version() {
   assertEquals "$(ni --version)" 'ni.bash 0.1.0'
 }
 
+# shellcheck disable=SC1090
 . ./shunit2/shunit2
