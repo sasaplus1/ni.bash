@@ -45,7 +45,7 @@ jobs:
         with:
           version: latest
       - if: matrix.manager == 'pnpm'
-        run: touch pnpm-lock.yaml
+        run: touch pnpm-lock.yml
       - if: matrix.manager == 'yarn'
         run: npm install -g yarn
       - if: matrix.manager == 'yarn'
