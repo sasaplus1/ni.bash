@@ -4,3 +4,10 @@
 /shunit2
 # shunit2 archive
 /shunit2.tar.gz
+
+# npm modules
+/package.json
+/package-lock.json
+/yarn.lock
+/pnpm-lock.yaml
+/bun.lockb
