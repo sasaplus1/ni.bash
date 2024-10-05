@@ -11,7 +11,7 @@ $ source ni.bash
 
 ## Requirements
 
-- jq
+- jq or node.js
 
 ## Inspired by
 
