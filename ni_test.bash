@@ -37,66 +37,66 @@ setUp() {
 }
 
 test_ni-aa() {
-  ni aa --version >/dev/null 2>&1
+  ni aa --version
   assertEquals $? 0
 }
 
 test_ni-add() {
   echo '{ "private": true }' > package.json
-  ni add undici >/dev/null 2>&1
-  command jq '.dependencies.undici' package.json >/dev/null 2>&1
+  ni add undici
+  command jq '.dependencies.undici' package.json
   assertEquals $? 0
 }
 
 test_ni-ci() {
   clean
-  ni add undici >/dev/null 2>&1
+  ni add undici
   command rm -rf ./node_modules
-  ni ci >/dev/null 2>&1
+  ni ci
   test -d ./node_modules
   assertEquals $? 0
 }
 
 test_ni-dlx() {
-  ni dlx semver --help >/dev/null 2>&1
+  ni dlx semver --help
   assertEquals $? 0
 }
 
 test_ni-install() {
   echo '{ "private": true }' > package.json
-  ni add undici >/dev/null 2>&1
+  ni add undici
   command rm -rf ./node_modules
-  ni install >/dev/null 2>&1
+  ni install
   test -d ./node_modules
   assertEquals $? 0
 }
 
 test_ni-remove() {
   echo '{ "private": true }' > package.json
-  ni add undici >/dev/null 2>&1
-  ni remove undici >/dev/null 2>&1
+  ni add undici
+  ni remove undici
   assertEquals "$(command jq -r '.dependencies.undici' package.json)" 'null'
 }
 
 test_ni-run() {
   echo '{ "private": true, "scripts": { "hello": "echo hello" } }' > package.json
-  ni run hello >/dev/null 2>&1
+  ni run hello
   assertEquals $? 0
 }
 
 test_ni-test() {
   echo '{ "private": true, "scripts": { "test": "echo test" } }' > package.json
-  ni t >/dev/null 2>&1
+  ni t
   assertEquals $? 0
-  ni test >/dev/null 2>&1
+  ni test
   assertEquals $? 0
 }
 
 test_ni-upgrade() {
   echo '{ "private": true }' > package.json
-  ni add undici@1 >/dev/null 2>&1
-  ni upgrade >/dev/null 2>&1
-  command jq '.dependencies.undici' package.json >/dev/null 2>&1
+  ni add undici@1
+  ni upgrade
+  command jq '.dependencies.undici' package.json
   assertEquals $? 0
 }
 
