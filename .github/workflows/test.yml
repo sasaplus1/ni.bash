@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          # - windows-latest
+          - windows-latest
           - macos-latest
           - ubuntu-latest
         manager:
@@ -30,6 +30,8 @@ jobs:
       run:
         shell: bash
     steps:
+      - if: matrix.os == 'windows-latest'
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
       - if: matix.manager == 'npm' || matix.manager == 'yarn'
         uses: actions/setup-node@v4
