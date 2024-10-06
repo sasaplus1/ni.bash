@@ -11,7 +11,6 @@ root := $(makefile_dir)
 all: ## output targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(makefile) | awk 'BEGIN { FS = ":.*?## " }; { printf "\033[36m%-30s\033[0m %s\n", $$1, $$2 }'
 
-# TODO: Windows: certutil -hashfile <file> SHA256
 .PHONY: install
 install: commit := 100ffe4dda539ebbe4ae9867132f08eeee8e80cb
 install: ## install dependencies
