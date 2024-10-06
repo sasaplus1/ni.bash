@@ -33,7 +33,7 @@ jobs:
       - if: matrix.os == 'windows-latest'
         run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
-      - if: matix.manager == 'npm' || matix.manager == 'yarn'
+      - if: matrix.manager == 'npm' || matrix.manager == 'yarn'
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
