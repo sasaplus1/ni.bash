@@ -61,7 +61,7 @@ jobs:
       - id: find
         run: |
           echo 'result<<EOF' | tee -a "$GITHUB_OUTPUT"
-          find . \( -name '*.sh' -o -name '*.bash' \) -print | xargs echo | tee -a "$GITHUB_OUTPUT"
+          find . \( -name '*.sh' -o -name '*.bash' \) -print0 | xargs -0 echo | tee -a "$GITHUB_OUTPUT"
           echo 'EOF' | tee -a "$GITHUB_OUTPUT"
       - uses: docker://koalaman/shellcheck:stable
         with:
