@@ -6,26 +6,43 @@ __ni-detect-package-manager() {
   local packageManager=
   local packageManagerName=
   local packageManagerVersion=
+  local dir="$PWD"
 
-  if [ -f 'package.json' ]
-  then
-    if type jq >/dev/null 2>&1
+  # Search upward for package.json and lock files
+  while [ "$dir" != "/" ]
+  do
+    # Check for package.json and packageManager field
+    if [ -f "$dir/package.json" ] && [ -z "$packageManagerName" ]
     then
-      packageManager="$(command jq -r '.packageManager // ""' package.json)"
-    elif type node >/dev/null 2>&1
-    then
-      packageManager="$(command node -p 'require("./package.json").packageManager || ""')"
+      if type jq >/dev/null 2>&1
+      then
+        packageManager="$(command jq -r '.packageManager // ""' "$dir/package.json")"
+      elif type node >/dev/null 2>&1
+      then
+        packageManager="$(command node -p "require('$dir/package.json').packageManager || ''")"
+      fi
+      if [ -n "$packageManager" ]
+      then
+        packageManagerName="${packageManager%@*}"
+        packageManagerVersion="${packageManager#*@}"
+        [ "$packageManagerName" == 'yarn' ] && [ "${packageManagerVersion%%.*}" -gt 1 ] && packageManagerName='yarn-berry'
+        break
+      fi
     fi
-    packageManagerName="${packageManager%@*}"
-    packageManagerVersion="${packageManager#*@}"
-    [ "$packageManagerName" == 'yarn' ] && [ "${packageManagerVersion%%.*}" -gt 1 ] && packageManagerName='yarn-berry'
-  fi
 
-  [ -z "$packageManagerName" ] && [ -f 'bun.lockb' ] && packageManagerName='bun'
-  [ -z "$packageManagerName" ] && [ -f 'pnpm-lock.yml' ] && packageManagerName='pnpm'
-  # NOTE: bun can create yarn.lock via bun install -y
-  [ -z "$packageManagerName" ] && [ -f 'yarn.lock' ] && packageManagerName='yarn'
-  [ -z "$packageManagerName" ] && [ -f 'package-lock.json' ] && packageManagerName='npm'
+    # Check for lock files
+    if [ -z "$packageManagerName" ]
+    then
+      [ -f "$dir/bun.lockb" ] && packageManagerName='bun' && break
+      [ -f "$dir/pnpm-lock.yml" ] && packageManagerName='pnpm' && break
+      # NOTE: bun can create yarn.lock via bun install -y
+      [ -f "$dir/yarn.lock" ] && packageManagerName='yarn' && break
+      [ -f "$dir/package-lock.json" ] && packageManagerName='npm' && break
+    fi
+
+    # Move to parent directory
+    dir="$(dirname "$dir")"
+  done
 
   # fallback
   [ -z "$packageManagerName" ] && packageManagerName='npm'
