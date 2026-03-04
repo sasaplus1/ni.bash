@@ -14,13 +14,13 @@ detect-package-manager() {
 }
 
 clean() {
-  command rm -rf ./package.json ./package-lock.json ./yarn.lock ./pnpm-lock.yml ./bun.lockb ./node_modules
+  command rm -rf ./package.json ./package-lock.json ./yarn.lock ./pnpm-lock.yaml ./bun.lockb ./node_modules
   case "$manager" in
     bun)
       touch bun.lockb
       ;;
     pnpm)
-      touch pnpm-lock.yml
+      touch pnpm-lock.yaml
       ;;
     yarn|yarn-berry)
       touch yarn.lock
