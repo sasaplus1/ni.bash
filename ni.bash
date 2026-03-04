@@ -34,7 +34,7 @@ __ni-detect-package-manager() {
     if [ -z "$packageManagerName" ]
     then
       [ -f "$dir/bun.lockb" ] && packageManagerName='bun' && break
-      [ -f "$dir/pnpm-lock.yml" ] && packageManagerName='pnpm' && break
+      [ -f "$dir/pnpm-lock.yaml" ] && packageManagerName='pnpm' && break
       # NOTE: bun can create yarn.lock via bun install -y
       [ -f "$dir/yarn.lock" ] && packageManagerName='yarn' && break
       [ -f "$dir/package-lock.json" ] && packageManagerName='npm' && break
